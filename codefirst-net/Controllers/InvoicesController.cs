@@ -40,19 +40,38 @@ namespace codefirst_net.Controllers
         // GET: Invoices/Create
         public ActionResult Create()
         {
-            ViewBag.ClientId = new SelectList(db.Clients, "ClientId", "Name");
-            return View();
+            var viewModel = new ClientProductViewModel
+            {
+                Clients = db.Clients.Select(c => new SelectListItem { Value = c.ClientId.ToString(), Text = c.Name }).ToList(),
+                Products = db.Products.Select(p => new SelectListItem { Value = p.ProductId.ToString(), Text = p.Name }).ToList()
+            };
+
+            return View(viewModel);
         }
+
 
         // POST: Invoices/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "InvoiceId,ClientId")] Invoice invoice)
+        public ActionResult Create(ClientProductViewModel vm)
         {
+           
+            var invoice = new Invoice();
             if (ModelState.IsValid)
             {
+
+
+                invoice.ClientId = vm.ClientId;
+                    // Other properties of Invoice can be set here
+                
+
+                Detail detail = new Detail { ProductId = vm.ProductId, Quantity = 15};
+                 List<Detail> details = new List<Detail>();
+                details.Add(detail);
+               invoice.Details = details;
+
                 db.Invoices.Add(invoice);
                 db.SaveChanges();
                 return RedirectToAction("Index");

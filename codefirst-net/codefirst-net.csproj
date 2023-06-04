@@ -142,6 +142,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\ClientProductViewModel.cs" />
     <Compile Include="Models\Detail.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\Product.cs" />
